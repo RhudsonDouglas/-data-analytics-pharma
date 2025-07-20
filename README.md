@@ -2,7 +2,7 @@
 
 **Rhudson Sampaio | Análise de Dados & Business Intelligence**
 
-Profissional com experiência na aplicação de SQL, ETL e visualização de dados para gerar soluções estratégicas no Sankhya ERP, com especialização na indústria farmacêutica e química.
+Graduando em Ciência de Dados pela PUC Minas, com experiência prática no desenvolvimento de dashboards estratégicos no Sankhya ERP. Meu foco é na aplicação de Python, SQL, Power BI e Excel avançado para transformar dados complexos em soluções de negócio mensuráveis.
 
 Este portfólio apresenta uma coleção de dashboards e soluções de BI desenvolvidas para resolver desafios de negócio complexos em diversas áreas, como Comercial, Financeiro e SAC, e gerar impacto mensurável.
 
@@ -106,7 +106,7 @@ ORDER BY
 * **Impacto no Negócio:** A ferramenta automatizou o processo de fechamento de vendas, fornecendo transparência total sobre a performance e o cálculo de comissões. Isso aumentou a motivação da equipe e permitiu que a gestão identificasse rapidamente desvios de meta para ações corretivas, fortalecendo a cultura de dados no setor comercial.
 
 ![Menu do Dashboard de Fechamento de Vendedoras](images/Menu%20Fechamento%20Vendedoras.png)
-![Tabela de Cálculo de Comissões](images/Comissões.png)
+![Tabela de Cálculo de Comissões](images/Comiss%C3%B5es.png)
 
 <details>
 <summary>Visualizar Código SQL de Exemplo (Cálculo de Comissão)</summary>
@@ -162,9 +162,43 @@ GROUP BY
 * **A Solução:** Desenvolvi o dashboard "Distribuição de Clientes", que segmenta a base em Ativos, Inativos e Perdidos, com base em regras de negócio dinâmicas. O diferencial da solução é um estudo detalhado da frequência de compras dos clientes "Perdidos", permitindo focar a reativação naqueles com maior potencial de retorno.
 * **Impacto no Negócio:** A ferramenta capacitou a equipe comercial com dados para maximizar a retenção e a prospecção. A análise de frequência direcionou os esforços de reativação para as oportunidades mais promissoras, otimizando o tempo da equipe e aumentando a taxa de sucesso das campanhas.
 
-<!-- 
-![Dashboard de Distribuição de Clientes](images/case-distribuicao-clientes.png) 
--->
+![Indicadores de Resumo da Carteira](images/Indicadores%20Carteira.png)
+![Gráfico de Potencial de Reativação](images/Clientes%20Perdidos%20por%20Frequ%C3%AAncia.png)
+
+<details>
+<summary>Visualizar Código SQL de Exemplo (Classificação de Status)</summary>
+
+```sql
+-- Lógica para classificação de status do cliente (Ativo, Inativo, Perdido)
+-- NOTA: Nomes de tabelas e campos foram genericizados para proteger a confidencialidade.
+SELECT
+    PAR.ID_CLIENTE,
+    PAR.NOME_CLIENTE,
+    ULT.ULTIMA_COMPRA,
+    -- Classificação dinâmica com base na data da última compra e no ciclo de vendas atual
+    CASE
+        WHEN ULT.ULTIMA_COMPRA IS NULL THEN 'PERDIDO'
+        WHEN ULT.COMPROU_NO_CICLO = 1 THEN 'ATIVO'
+        WHEN ULT.ULTIMA_COMPRA >= ADD_MONTHS(:DATA_INICIAL_CICLO, -4) THEN 'ATIVO'
+        WHEN ULT.ULTIMA_COMPRA BETWEEN ADD_MONTHS(:DATA_INICIAL_CICLO, -6) AND ADD_MONTHS(:DATA_INICIAL_CICLO, -4) THEN 'INATIVO'
+        ELSE 'PERDIDO'
+    END AS STATUS_CLIENTE
+FROM
+    CAD_PARCEIROS PAR
+    LEFT JOIN (
+        -- Subconsulta para encontrar a data da última compra de cada cliente
+        SELECT
+            C.ID_PARCEIRO,
+            MAX(C.DATA_FATURAMENTO) AS ULTIMA_COMPRA,
+            MAX(CASE WHEN C.DATA_FATURAMENTO >= :DATA_INICIAL_CICLO THEN 1 ELSE 0 END) AS COMPROU_NO_CICLO
+        FROM FAT_NOTAS_CABECALHO C
+        WHERE C.TIPO_OPERACAO LIKE 'VENDA%' AND C.STATUS_NOTA = 'APROVADA'
+        GROUP BY C.ID_PARCEIRO
+    ) ULT ON ULT.ID_PARCEIRO = PAR.ID_PARCEIRO
+WHERE
+    PAR.TIPO_CLIENTE = 'ATIVO';
+```
+</details>
 
 ---
 
