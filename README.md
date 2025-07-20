@@ -118,4 +118,4 @@ ORDER BY
 
 * **Tomada de Decisão Baseada em Dados:** A ferramenta eliminou a "percepção" e forneceu dados concretos, permitindo que a diretoria e a equipe comercial focassem nos clientes que realmente necessitavam de uma reavaliação estratégica.
 * **Ação Comercial Direcionada:** Com os insights do dashboard, a equipe comercial renegociou acordos, ajustou o mix de produtos e otimizou os preços para os clientes de baixa margem.
-* **Impacto Financeiro:** As ações tomadas resultaram em um **aumento médio de 8% na margem de lucro** dos clientes analisados no semestre seguinte, otimizando a rentabilidade da empresa sem comprometer o volume de faturamento.
+* **Impacto Financeiro:** Com as renegociações e ajustes de mix, a companhia alcançou uma elevação significativa na lucratividade da carteira de clientes, assegurando ganhos de margem sem sacrificar o volume de vendas.
