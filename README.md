@@ -1,8 +1,8 @@
 # Portfólio de Análise de Dados | Foco na Indústria Farmacêutica e Química
 
-**Rhudson Sampaio | Análise de Dados & Business Intelligence**
+**Rhudson Sampaio | Ciência de Dados & Business Intelligence**
 
-Profissional com experiência na aplicação de SQL, ETL e visualização de dados para gerar soluções estratégicas no Sankhya ERP, com especialização na indústria farmacêutica e química.
+Graduando em Ciência de Dados pela PUC Minas, com experiência prática no desenvolvimento de dashboards estratégicos no Sankhya ERP. Meu foco é na aplicação de Python, SQL, Power BI e Excel avançado para transformar dados complexos em soluções de negócio mensuráveis.
 
 Este portfólio apresenta uma coleção de dashboards e soluções de BI desenvolvidas para resolver desafios de negócio complexos em diversas áreas, como Comercial, Financeiro e SAC, e gerar impacto mensurável.
 
