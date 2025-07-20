@@ -1,8 +1,8 @@
 # Portfólio de Análise de Dados | Foco na Indústria Farmacêutica e Química
 
-**Rhudson Sampaio | Ciência de Dados & Business Intelligence**
+**Rhudson Sampaio | Análise de Dados & Business Intelligence**
 
-Graduando em Ciência de Dados pela PUC Minas, com experiência prática no desenvolvimento de dashboards estratégicos no Sankhya ERP. Meu foco é na aplicação de Python, SQL, Power BI e Excel avançado para transformar dados complexos em soluções de negócio mensuráveis.
+Profissional com experiência na aplicação de SQL, ETL e visualização de dados para gerar soluções estratégicas no Sankhya ERP, com especialização na indústria farmacêutica e química.
 
 Este portfólio apresenta uma coleção de dashboards e soluções de BI desenvolvidas para resolver desafios de negócio complexos em diversas áreas, como Comercial, Financeiro e SAC, e gerar impacto mensurável.
 
@@ -98,7 +98,64 @@ ORDER BY
 
 ---
 
-### Case 2: Dashboard de Gestão de Carteira e Análise de Churn
+### Case 2: Dashboard de Performance e Fechamento de Vendas
+
+* **Área de Impacto:** Gestão Comercial, Vendas e Controladoria.
+* **O Desafio:** A gestão comercial necessitava de uma ferramenta consolidada para monitorar a performance da força de vendas em tempo real, calcular comissões com base em regras de negócio complexas e acompanhar o atingimento de metas individuais e globais de forma transparente.
+* **A Solução:** Desenvolvi o dashboard "Fechamento Vendedoras", uma solução de BI com múltiplos níveis de análise. A plataforma consolida KPIs como Faturamento (Individual e Global), Cesta de Produtos, Positivação e Novos/Reativados. O principal diferencial é o módulo de cálculo de comissões, que aplica regras distintas para clientes de perfil GERAL vs. KA (Key Account).
+* **Impacto no Negócio:** A ferramenta automatizou o processo de fechamento de vendas, fornecendo transparência total sobre a performance e o cálculo de comissões. Isso aumentou a motivação da equipe e permitiu que a gestão identificasse rapidamente desvios de meta para ações corretivas, fortalecendo a cultura de dados no setor comercial.
+
+![Menu do Dashboard de Fechamento de Vendedoras](images/Menu%20Fechamento%20Vendedoras.png)
+![Tabela de Cálculo de Comissões](images/Comissoes.png)
+
+<details>
+<summary>Visualizar Código SQL de Exemplo (Cálculo de Comissão)</summary>
+
+```sql
+-- Lógica para cálculo de comissão por perfil de cliente (GERAL vs KA)
+-- NOTA: Nomes de tabelas e campos foram genericizados para proteger a confidencialidade.
+SELECT
+    v.NOME_VENDEDORA AS COLABORADOR,
+    p.PERFIL_CLIENTE, -- 'GERAL' ou 'KA'
+    SUM(
+        CASE
+            WHEN c.TIPO_OPERACAO LIKE 'VENDA%' THEN c.VALOR_NOTA
+            WHEN c.TIPO_OPERACAO LIKE 'DEVOLUCAO%' THEN -c.VALOR_NOTA
+        END
+    ) AS FATURAMENTO_LIQUIDO,
+    MAX(meta.VALOR_META) AS META,
+    -- Lógica de Faixas de Comissão
+    CASE
+        WHEN p.PERFIL_CLIENTE = 'GERAL' THEN
+            CASE
+                WHEN (SUM(c.VALOR_NOTA_LIQUIDA) / MAX(meta.VALOR_META)) BETWEEN 1.00 AND 1.09 THEN 0.02 -- 2%
+                WHEN (SUM(c.VALOR_NOTA_LIQUIDA) / MAX(meta.VALOR_META)) >= 1.10 THEN 0.03 -- 3%
+                ELSE 0
+            END
+        WHEN p.PERFIL_CLIENTE = 'KA' THEN
+            CASE
+                WHEN (SUM(c.VALOR_NOTA_LIQUIDA) / MAX(meta.VALOR_META)) BETWEEN 1.00 AND 1.09 THEN 0.015 -- 1.5%
+                WHEN (SUM(c.VALOR_NOTA_LIQUIDA) / MAX(meta.VALOR_META)) >= 1.10 THEN 0.025 -- 2.5%
+                ELSE 0
+            END
+    END AS PERCENTUAL_COMISSAO
+FROM
+    FAT_NOTAS_CABECALHO c
+    JOIN CAD_VENDEDORES v ON v.ID_VENDEDOR = c.ID_VENDEDOR
+    JOIN CAD_PARCEIROS p ON p.ID_PARCEIRO = c.ID_PARCEIRO
+    JOIN PLAN_METAS meta ON meta.ID_VENDEDOR = v.ID_VENDEDOR AND meta.MES_ANO = TO_CHAR(c.DATA_FATURAMENTO, 'YYYY-MM')
+WHERE
+    c.DATA_FATURAMENTO BETWEEN :DATA_INICIAL AND :DATA_FINAL
+    AND c.STATUS_NOTA = 'APROVADA'
+GROUP BY
+    v.NOME_VENDEDORA,
+    p.PERFIL_CLIENTE;
+```
+</details>
+
+---
+
+### Case 3: Dashboard de Gestão de Carteira e Análise de Churn
 
 * **Área de Impacto:** Comercial e Serviço de Atendimento ao Cliente (SAC).
 * **O Desafio:** A equipe comercial necessitava de uma ferramenta analítica para otimizar a gestão da carteira, compreender a saúde da base de clientes e, principalmente, priorizar esforços de reativação comercial de forma estratégica.
@@ -111,7 +168,7 @@ ORDER BY
 
 ---
 
-### Case 3: Dashboard de Análise Financeira e de Risco
+### Case 4: Dashboard de Análise Financeira e de Risco
 
 * **Área de Impacto:** Financeiro e Logística.
 * **O Desafio:** A empresa precisava de uma visão 360° do ciclo financeiro, desde o faturamento até a liquidação, incluindo análises de risco de crédito e identificação de gargalos logísticos que impactavam o faturamento.
