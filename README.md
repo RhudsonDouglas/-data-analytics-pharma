@@ -106,7 +106,7 @@ ORDER BY
 * **Impacto no Negócio:** A ferramenta automatizou o processo de fechamento de vendas, fornecendo transparência total sobre a performance e o cálculo de comissões. Isso aumentou a motivação da equipe e permitiu que a gestão identificasse rapidamente desvios de meta para ações corretivas, fortalecendo a cultura de dados no setor comercial.
 
 ![Menu do Dashboard de Fechamento de Vendedoras](images/Menu%20Fechamento%20Vendedoras.png)
-![Tabela de Cálculo de Comissões](images/Comissoes.png)
+![Tabela de Cálculo de Comissões](images/Comissões.png)
 
 <details>
 <summary>Visualizar Código SQL de Exemplo (Cálculo de Comissão)</summary>
