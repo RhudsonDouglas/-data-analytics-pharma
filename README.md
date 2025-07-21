@@ -243,4 +243,39 @@ FROM DUAL;
 </details>
 
 ---
+### Case 5: Dashboard de Análise de Lead Time Operacional
+
+* **Área de Impacto:** Logística, Operações e Gestão Comercial.
+* **O Desafio:** A empresa necessitava de visibilidade sobre a eficiência de seus processos internos, desde a emissão do pedido até a separação, para identificar gargalos que impactavam o tempo de entrega ao cliente.
+* **A Solução:** Este projeto iniciou como uma parceria acadêmica com a PUC Minas (disciplinas de Projeto III, Banco de Dados e Visualização de Dados) enquanto eu era estagiário, e evoluiu para uma solução de BI robusta com a implantação do Sankhya ERP. Desenvolvi o dashboard de "Análise de Lead Time Operacional", que monitora em tempo real a velocidade com que os pedidos evoluem por setor de negócio, comparando as etapas de "Emissão" e "Separação".
+* **Impacto no Negócio:** A ferramenta forneceu insights cruciais sobre a performance de cada setor, permitindo à gestão identificar e atuar sobre os principais gargalos. A análise da evolução mensal do lead time tornou-se um KPI para medir o impacto de melhorias contínuas nos processos logísticos.
+
+![Dashboard de Análise de Lead Time](images/LeadTime.png)
+
+<details>
+<summary>Visualizar Código SQL de Exemplo (Cálculo de Lead Time Médio)</summary>
+
+```sql
+-- Lógica para cálculo do tempo médio entre etapas do pedido por ramo de atividade
+-- NOTA: Nomes de tabelas e campos foram genericizados para proteger a confidencialidade.
+SELECT
+    par.RAMO_ATIVIDADE,
+    -- Tempo médio entre a criação do pedido e a data de separação
+    ROUND(AVG(CASE WHEN ped.TIPO_MOVIMENTO = 'PEDIDO_VENDA' THEN (ped.DATA_SEPARACAO - ped.DATA_MOVIMENTO) END), 2) AS TEMPO_EMISSAO_DIAS,
+    -- Tempo médio entre a separação e o processamento final
+    ROUND(AVG(CASE WHEN ped.TIPO_MOVIMENTO = 'SEPARACAO' THEN (ped.DATA_PROCESSAMENTO - ped.DATA_MOVIMENTO) END), 2) AS TEMPO_SEPARACAO_DIAS
+FROM
+    MOVIMENTOS_INTERNOS ped
+    JOIN CAD_PARCEIROS par ON par.ID_PARCEIRO = ped.ID_PARCEIRO
+WHERE
+    ped.TIPO_MOVIMENTO IN ('PEDIDO_VENDA', 'SEPARACAO')
+    AND ped.DATA_MOVIMENTO BETWEEN :DATA_INICIAL AND :DATA_FINAL
+GROUP BY
+    par.RAMO_ATIVIDADE
+ORDER BY
+    RAMO_ATIVIDADE;
+```
+</details>
+
+---
 
