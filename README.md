@@ -202,15 +202,45 @@ WHERE
 
 ---
 
-### Case 4: Dashboard de Análise Financeira e de Risco
+### Case 4: Dashboard de Metas e Performance Individual
 
-* **Área de Impacto:** Financeiro e Logística.
-* **O Desafio:** A empresa precisava de uma visão 360° do ciclo financeiro, desde o faturamento até a liquidação, incluindo análises de risco de crédito e identificação de gargalos logísticos que impactavam o faturamento.
-* **A Solução:** Criei um dashboard financeiro com quatro pilares estratégicos: 1) Monitoramento de títulos a receber com score de risco por cliente; 2) Análise de Faturado vs. Recebido para avaliar a eficiência do fluxo de caixa; 3) Gestão de saldo de crédito (integrando dados internos e do SERASA); e 4) Acompanhamento de itens com entrega atrasada.
-* **Impacto no Negócio:** A solução forneceu uma visão consolidada que otimizou o fluxo de caixa, melhorou a gestão de crédito com base em scores de risco e permitiu a identificação de problemas logísticos antes que afetassem o cliente, protegendo a receita e a satisfação.
+* **Área de Impacto:** Força de Vendas e Gestão Comercial.
+* **O Desafio:** Fornecer a cada vendedora uma visão clara, detalhada e acionável de sua performance individual em relação a um conjunto de metas personalizadas, além de oferecer uma visão de projeção de vendas para o fechamento do ciclo.
+* **A Solução:** Criei um dashboard de performance individual que consolida os KPIs mais importantes para cada vendedora: Faturamento, Positivação, Cesta de Produtos e Clientes Reativados. A solução inclui um velocímetro (gauge chart) para o acompanhamento da meta de faturamento e um botão de navegação para um nível de detalhe com a projeção de vendas futuras.
+* **Impacto no Negócio:** O dashboard empoderou as vendedoras com dados em tempo real sobre sua performance, aumentando o engajamento e a responsabilidade sobre as metas. A visão de projeção permitiu uma atuação mais proativa para garantir o atingimento dos objetivos ao final de cada ciclo de vendas.
 
-<!-- 
-![Dashboard de Análise Financeira](images/case-financeiro.png) 
--->
+![Dashboard de Metas Individuais](images/Metas%20Individuais%20principal.png)
+![Dashboard de Projeção de Vendas](images/Proje%C3%A7%C3%A3o.png)
+
+<details>
+<summary>Visualizar Código SQL de Exemplo (KPI de Positivação)</summary>
+
+```sql
+-- Lógica para cálculo do KPI de Positivação
+-- NOTA: Nomes de tabelas e campos foram genericizados para proteger a confidencialidade.
+SELECT
+    TRUNC(
+        (
+            -- Clientes que compraram no ciclo atual
+            (SELECT COUNT(DISTINCT c.ID_PARCEIRO)
+             FROM VENDAS_CABECALHO c
+             WHERE c.ID_VENDEDOR = :ID_VENDEDOR
+               AND TRUNC(c.DATA_FATURAMENTO) BETWEEN :INICIO_CICLO AND :FIM_CICLO)
+            /
+            -- Total de clientes ativos nos 4 meses anteriores ao ciclo
+            NULLIF(
+                (SELECT COUNT(DISTINCT c2.ID_PARCEIRO)
+                 FROM VENDAS_CABECALHO c2
+                 WHERE c2.ID_VENDEDOR = :ID_VENDEDOR
+                   AND TRUNC(c2.DATA_FATURAMENTO) BETWEEN ADD_MONTHS(:INICIO_CICLO, -4) AND (:INICIO_CICLO - 1)),
+                0
+            )
+        ) * 100,
+        2
+    ) AS PERCENTUAL_POSITIVACAO
+FROM DUAL;
+```
+</details>
 
 ---
+
