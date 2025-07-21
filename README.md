@@ -10,7 +10,7 @@ Este portfólio apresenta uma coleção de dashboards e soluções de BI desenvo
 
 ## 📊 Projetos de Business Intelligence
 
-### Case 1: Solução de BI Gerencial (Dashboard RMG v3)
+### Case 1: Solução de BI Gerencial
 
 * **Área de Impacto:** Setor Comercial (Vendas e Gestão).
 * **O Desafio:** O setor comercial necessitava de uma ferramenta de Business Intelligence centralizada para acompanhamento 360° da performance de vendas. O objetivo era consolidar análises aprofundadas sobre faturamento, margem de lucro, performance de clientes e curvas ABC, capacitando a equipe com dados para uma atuação mais estratégica.
