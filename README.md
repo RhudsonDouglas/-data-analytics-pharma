@@ -8,6 +8,14 @@ Este portfólio apresenta uma coleção de dashboards e soluções de BI desenvo
 
 ---
 
+### ⚠️ **Importante:** Sobre os Dados e Imagens Apresentados
+
+Para garantir a **confidencialidade** das empresas e informações com as quais trabalhei, todos os **dados utilizados nos exemplos de código SQL e nas visualizações dos dashboards foram gerados de forma aleatória e são fictícios**. As estruturas de tabelas e a lógica de negócio foram mantidas para demonstrar a complexidade e a profundidade das análises, mas os valores numéricos e nomes são meramente ilustrativos.
+
+As imagens dos dashboards foram criadas utilizando **mockups e ferramentas de prototipagem**, não sendo capturas diretas do sistema Sankhya ERP. Elas refletem o design, a interatividade e a riqueza de detalhes das soluções reais que implementei, mas com dados e representações visuais generalizadas para fins de portfólio.
+
+---
+
 ## 📊 Projetos de Business Intelligence
 
 ### Case 1: Solução de BI Gerencial
